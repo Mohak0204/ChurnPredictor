@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import streamlit as st
 
-from src import app_state
+from src import app_state, config
 from src.data_loader import DataLoadError, load_dataset_cached
 from src.data_cleaning import clean_data
 from src.ui import layout
@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name
 
 st.set_page_config(
     page_title="Customer Churn Prediction & Retention Analytics",
-    page_icon="📊",
+    page_icon="◆",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -34,8 +34,27 @@ layout.inject_css()
 # Sidebar: identity + navigation
 # ---------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown("### Customer Churn Prediction")
-    st.caption("Explore customer patterns and compare churn classifiers.")
+    st.markdown(
+        f"""
+        <div style='margin: .2rem 0 .9rem'>
+            <div style='display:flex; align-items:center; gap:.6rem'>
+                <div style='width:34px; height:34px; border-radius:9px; background:{config.COLOR_INK};
+                            display:flex; align-items:center; justify-content:center'>
+                    <span style='color:#FFFFFF; font-size:15px; font-weight:800'>&#9670;</span>
+                </div>
+                <div>
+                    <div style='font-weight:800; font-size:.95rem; color:{config.COLOR_INK};
+                                letter-spacing:-0.01em; line-height:1.2'>ChurnPredictor</div>
+                    <div style='font-size:.72rem; color:{config.COLOR_TEXT_MUTED}'>Retention Analytics</div>
+                </div>
+            </div>
+            <div style='font-size:.76rem; color:{config.COLOR_TEXT_MUTED}; margin-top:.75rem'>
+                Explore customer patterns and compare churn classifiers.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.divider()
     page = st.radio(
         "Navigation",

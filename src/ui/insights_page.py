@@ -26,24 +26,24 @@ def render(cleaned_df, logreg: ModelResult, lda: ModelResult, logreg_eval, lda_e
 
     st.markdown("#### Observed patterns in the data")
     st.markdown(
-        f"<div class='cc-panel'><p class='cc-note'>📋 {contract_insight(cleaned_df)}</p></div>",
+        f"<div class='cc-panel'><p class='cc-note'>{contract_insight(cleaned_df)}</p></div>",
         unsafe_allow_html=True,
     )
     left, right = st.columns(2, gap="large")
     with left:
         st.markdown(
-            f"<div class='cc-panel'><p class='cc-note'>⏳ {tenure_insight(cleaned_df)}</p></div>",
+            f"<div class='cc-panel'><p class='cc-note'>{tenure_insight(cleaned_df)}</p></div>",
             unsafe_allow_html=True,
         )
     with right:
         st.markdown(
-            f"<div class='cc-panel'><p class='cc-note'>💳 {payment_or_internet_insight(cleaned_df)}</p></div>",
+            f"<div class='cc-panel'><p class='cc-note'>{payment_or_internet_insight(cleaned_df)}</p></div>",
             unsafe_allow_html=True,
         )
 
     st.markdown("#### Model comparison")
     st.markdown(
-        f"<div class='cc-panel'><p class='cc-note'>⚖️ {model_comparison_insight(logreg_eval, lda_eval)}</p></div>",
+        f"<div class='cc-panel'><p class='cc-note'>{model_comparison_insight(logreg_eval, lda_eval)}</p></div>",
         unsafe_allow_html=True,
     )
     st.caption(
@@ -80,6 +80,5 @@ def render(cleaned_df, logreg: ModelResult, lda: ModelResult, logreg_eval, lda_e
         st.markdown(f"- {limitation}")
     st.info(
         "Predictions indicate estimated risk, not certainty about any individual customer. "
-        "This is an educational decision-support demonstration, not an operational retention tool.",
-        icon="⚠️",
+        "This is an educational decision-support demonstration, not an operational retention tool."
     )

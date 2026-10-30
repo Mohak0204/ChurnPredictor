@@ -48,20 +48,25 @@ def render(cleaned_df, quality_report, source_label: str, model_rows: list[dict]
             width="stretch",
         )
     with right:
-        st.markdown("#### About churn")
         st.markdown(
-            "**Churn** means a customer ended their subscription. In this dataset the "
-            "`Churn` column records whether each customer left the fictional telecom "
-            "provider.\n\n"
-            "- `Churn = Yes` is the **positive class** the models learn to identify.\n"
-            f"- About **{overview['churn_rate']:.1%}** of customers in this sample churned, "
-            "so the classes are imbalanced — accuracy alone can be misleading and F1-score, "
-            "recall, and ROC-AUC matter.\n\n"
-            "All figures on this page describe the **historical sample**. Predictions and "
-            "model metrics appear separately in the Model Lab."
+            f"""
+            <div class='cc-panel'>
+            <div class='cc-panel-title'>About churn</div>
+            <p class='cc-note'><b>Churn</b> means a customer ended their subscription. The
+            <code>Churn</code> column records whether each customer left the fictional telecom
+            provider.</p>
+            <p class='cc-note' style='margin-top:.5rem'>- <code>Churn = Yes</code> is the
+            <b>positive class</b> the models learn to identify.</p>
+            <p class='cc-note' style='margin-top:.3rem'>- About <b>{overview['churn_rate']:.1%}</b> of customers
+            in this sample churned, so the classes are imbalanced — accuracy alone can be misleading;
+            F1-score, recall, and ROC-AUC matter.</p>
+            <p class='cc-note' style='margin-top:.5rem'>All figures on this page describe the
+            <b>historical sample</b>. Predictions and model metrics appear separately in the Model Lab.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
         st.info(
             "This is a public educational sample dataset (IBM Telco Customer Churn). "
-            "Values shown are dataset records, not live customer data.",
-            icon="ℹ️",
+            "Values shown are dataset records, not live customer data."
         )

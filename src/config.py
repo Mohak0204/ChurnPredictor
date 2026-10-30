@@ -98,22 +98,31 @@ LOGREG_DEFAULT_C = 1.0
 LOGREG_C_OPTIONS = [0.01, 0.1, 1.0, 10.0]
 
 # ---------------------------------------------------------------------------
-# Visual tokens (restrained white / charcoal / blue / green system)
+# Visual tokens — premium black/white system with blue accents
 # ---------------------------------------------------------------------------
 COLOR_TEXT = "#111827"        # charcoal headings/body
+COLOR_INK = "#0B1220"         # near-black, deep surfaces / strongest text
 COLOR_TEXT_MUTED = "#64748B"  # secondary text
-COLOR_BORDER = "#E2E8F0"      # light separators
+COLOR_HINT = "#3E63DD"        # blue helper/hint text
+COLOR_BORDER = "#E5E9F0"      # light separators
+COLOR_BORDER_STRONG = "#CDD7E4"
 COLOR_BG = "#FFFFFF"
-COLOR_BG_SOFT = "#F8FAFC"
+COLOR_BG_SOFT = "#F7F9FC"
 COLOR_ACCENT_BLUE = "#2563EB"
+COLOR_ACCENT_BLUE_DEEP = "#1D4ED8"
+COLOR_ACCENT_BLUE_TINT = "#EFF4FE"
 COLOR_ACCENT_GREEN = "#16A34A"
-COLOR_DARK_SURFACE = "#0F172A"
+COLOR_DARK_SURFACE = "#0B1220"
 COLOR_WARNING = "#D97706"
+FONT_FAMILY = "Inter, 'Segoe UI', -apple-system, sans-serif"
 
 # Chart series encoding — consistent across the whole app.
 COLOR_CHURN_YES = "#DC2626"     # churned customers (red = risk)
 COLOR_CHURN_NO = "#2563EB"      # retained customers (blue)
 CHURN_COLOR_MAP = {"Yes": COLOR_CHURN_YES, "No": COLOR_CHURN_NO}
+
+# Model series: LogReg = blue (primary), LDA = charcoal (comparison).
+MODEL_SERIES_COLORS = [COLOR_ACCENT_BLUE, "#334155"]
 
 PLOTLY_LAYOUT_TEMPLATE = {
     "template": "plotly_white",

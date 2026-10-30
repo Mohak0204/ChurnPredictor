@@ -18,13 +18,52 @@ from src import config
 def _apply_layout(fig: go.Figure, title: str, x_title: str, y_title: str, legend: bool = True):
     fig.update_layout(
         template="plotly_white",
-        title={"text": title, "font": {"size": 15, "color": config.COLOR_TEXT}},
-        margin={"l": 50, "r": 20, "t": 55, "b": 50},
+        font={"family": config.FONT_FAMILY, "color": config.COLOR_TEXT, "size": 12},
+        title={
+            "text": title,
+            "font": {"size": 13.5, "color": config.COLOR_INK, "family": config.FONT_FAMILY},
+            "x": 0.01,
+            "xanchor": "left",
+        },
+        margin={"l": 55, "r": 22, "t": 52, "b": 48},
         showlegend=legend,
-        legend=dict(orientation="h", y=-0.15) if legend else None,
+        legend=(
+            dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.0,
+                xanchor="right",
+                x=1.0,
+                font={"size": 11, "color": config.COLOR_TEXT_MUTED},
+                bgcolor="rgba(0,0,0,0)",
+            )
+            if legend
+            else None
+        ),
+        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="#FFFFFF",
+        hoverlabel={
+            "bgcolor": "#FFFFFF",
+            "bordercolor": config.COLOR_BORDER_STRONG,
+            "font": {"color": config.COLOR_TEXT, "family": config.FONT_FAMILY, "size": 12},
+        },
     )
-    fig.update_xaxes(title_text=x_title, gridcolor="#EEF2F7")
-    fig.update_yaxes(title_text=y_title, gridcolor="#EEF2F7")
+    fig.update_xaxes(
+        title_text=x_title,
+        title_font={"size": 11.5, "color": config.COLOR_TEXT_MUTED},
+        gridcolor="#EEF2F7",
+        linecolor=config.COLOR_BORDER_STRONG,
+        tickfont={"size": 11, "color": config.COLOR_TEXT_MUTED},
+        zeroline=False,
+    )
+    fig.update_yaxes(
+        title_text=y_title,
+        title_font={"size": 11.5, "color": config.COLOR_TEXT_MUTED},
+        gridcolor="#EEF2F7",
+        linecolor=config.COLOR_BORDER_STRONG,
+        tickfont={"size": 11, "color": config.COLOR_TEXT_MUTED},
+        zeroline=False,
+    )
     return fig
 
 
@@ -156,7 +195,7 @@ def roc_curve_chart(roc_series: list[dict], split_label: str) -> go.Figure:
     ``roc_series`` items: {model_name, fpr, tpr, auc}.
     """
     fig = go.Figure()
-    palette = [config.COLOR_ACCENT_BLUE, config.COLOR_ACCENT_GREEN]
+    palette = config.MODEL_SERIES_COLORS
     for i, series in enumerate(roc_series):
         auc_text = f"{series['auc']:.3f}" if series.get("auc") is not None else "n/a"
         fig.add_trace(
@@ -175,7 +214,7 @@ def roc_curve_chart(roc_series: list[dict], split_label: str) -> go.Figure:
             y=[0, 1],
             mode="lines",
             name="Chance (AUC = 0.500)",
-            line=dict(color="#9CA3AF", dash="dot"),
+            line=dict(color="#B6C2D4", dash="dot"),
             hoverinfo="skip",
         )
     )
@@ -192,7 +231,7 @@ def metric_comparison_chart(rows: list[dict]) -> go.Figure:
     df = pd.DataFrame(rows)
     metric_cols = ["Accuracy", "Precision", "Recall", "F1-score", "ROC-AUC"]
     fig = go.Figure()
-    palette = [config.COLOR_ACCENT_BLUE, config.COLOR_ACCENT_GREEN]
+    palette = config.MODEL_SERIES_COLORS
     for i, model_name in enumerate(df["Model"].unique()):
         model_row = df[df["Model"] == model_name].iloc[0]
         values = [float(model_row[m]) if pd.notna(model_row[m]) else 0.0 for m in metric_cols]

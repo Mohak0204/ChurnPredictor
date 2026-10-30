@@ -137,48 +137,49 @@ def render(cleaned_df) -> None:
     st.session_state["cleaned_df"] = cleaned_df
     fingerprint = _dataset_fingerprint()
 
-    # ----- Controls ---------------------------------------------------------
-    c1, c2, c3 = st.columns([1.1, 1.7, 1.2], gap="small")
-    with c1:
-        model_choice = st.radio(
-            "Model",
-            ["Logistic Regression", "LDA", "Compare both"],
-            help="Which model's validation results to show, or a side-by-side comparison on the same split.",
-        )
-    with c2:
-        threshold = st.slider(
-            "Classification threshold (validation set)",
-            min_value=config.THRESHOLD_MIN,
-            max_value=config.THRESHOLD_MAX,
-            value=config.DEFAULT_THRESHOLD,
-            step=config.THRESHOLD_STEP,
-            format="%.2f",
-            help=(
-                "A customer is flagged as churn-risk when predicted churn probability ≥ threshold. "
-                "Lowering it flags more customers (usually higher recall, lower precision); "
-                "raising it flags fewer."
-            ),
-        )
-    with c3:
-        C_value = st.select_slider(
-            "LogReg regularization (C)",
-            options=config.LOGREG_C_OPTIONS,
-            value=config.LOGREG_DEFAULT_C,
-            help="Changing C retrains Logistic Regression on training data only and re-evaluates on validation data. Test metrics are never used for this choice.",
+    # ----- Controls (bounded control area) ----------------------------------
+    with st.container(border=True):
+        c1, c2, c3 = st.columns([1.1, 1.7, 1.2], gap="small")
+        with c1:
+            model_choice = st.radio(
+                "Model",
+                ["Logistic Regression", "LDA", "Compare both"],
+                help="Which model's validation results to show, or a side-by-side comparison on the same split.",
+            )
+        with c2:
+            threshold = st.slider(
+                "Classification threshold (validation set)",
+                min_value=config.THRESHOLD_MIN,
+                max_value=config.THRESHOLD_MAX,
+                value=config.DEFAULT_THRESHOLD,
+                step=config.THRESHOLD_STEP,
+                format="%.2f",
+                help=(
+                    "A customer is flagged as churn-risk when predicted churn probability ≥ threshold. "
+                    "Lowering it flags more customers (usually higher recall, lower precision); "
+                    "raising it flags fewer."
+                ),
+            )
+        with c3:
+            C_value = st.select_slider(
+                "LogReg regularization (C)",
+                options=config.LOGREG_C_OPTIONS,
+                value=config.LOGREG_DEFAULT_C,
+                help="Changing C retrains Logistic Regression on training data only and re-evaluates on validation data. Test metrics are never used for this choice.",
+            )
+
+        cap_outliers = st.checkbox(
+            "Enable IQR capping of numeric predictors (fitted on training data only)",
+            value=False,
+            help="Clips numeric predictors to IQR bounds learned from the training partition, applied unchanged to validation/test. Changing this refits both models.",
         )
 
-    cap_outliers = st.checkbox(
-        "Enable IQR capping of numeric predictors (fitted on training data only)",
-        value=False,
-        help="Clips numeric predictors to IQR bounds learned from the training partition, applied unchanged to validation/test. Changing this refits both models.",
-    )
-
-    layout.status_chip_row([
-        ("Validation / Interactive", "blue"),
-        ("Test / Final Evaluation — fixed threshold 0.50", "green"),
-        (f"Random seed = {config.DEFAULT_RANDOM_SEED}", "neutral"),
-        ("Threshold changes never retrain the models", "neutral"),
-    ])
+        layout.status_chip_row([
+            ("Validation / Interactive", "blue"),
+            ("Test / Final Evaluation — fixed threshold 0.50", "green"),
+            (f"Random seed = {config.DEFAULT_RANDOM_SEED}", "neutral"),
+            ("Threshold changes never retrain the models", "neutral"),
+        ])
 
     # ----- Models (cached by true configuration) -----------------------------
     bundle = app_state.cached_models(
